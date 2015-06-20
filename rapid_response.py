@@ -29,13 +29,14 @@ try:
 except getopt.GetoptError:
 	print("To run test:\n  python rapid_response.py -test -m \"<message>\"")
 	print("To run actual rapid response:\n  python rapid_response.py -m \"<message>\"")
-"""
+
+# Main code for sending out texts
 for opt, arg in opts:
 	if opt == '-test':
-		print("test option")
-		# Open the test workbook and get the first sheet
-		wks = gc.open('Rapid Response Test').sheet1
-		sys.exit()
+		print("Running Rapid Response test ...")
+		filename = 'Rapid Response Test'
+# Open the test workbook and get the first sheet
+wks = gc.open(filename).sheet1
 # Get the phone numbers column
 phone_nums = wks.col_values(4)
 # Get the text permissions
@@ -53,4 +54,4 @@ for number in phone_nums:
 		contact = {'number': number, 'message': message}
 		r = requests.post(url, data=contact)
 		print(number +':\n'+r.text+'\n')
-"""
+
