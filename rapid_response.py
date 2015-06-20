@@ -7,39 +7,38 @@ from oauth2client.client import SignedJwtAssertionCredentials
 
 # Open the google sheet
 # Get the credentials
-json_key = json.load(open(''))
+json_key = json.load(open('friendsList-9b04d9a97e4c.json')) # json file with credentials goes here
 scope = ['https://spreadsheets.google.com/feeds']
 
 # Authorize
 credentials = SignedJwtAssertionCredentials(json_key['client_email'], json_key['private_key'], scope)
 gc = gspread.authorize(credentials)
 
-
-# Open the workbook and get the first sheet
-wks = gc.open('Rapid Response Test').sheet1
-
-# Get the phone numbers column
-phone_nums = wks.col_values(4)
-
-# Get the text permissions
-text_perms = wks.col_values(5)
-
-# Remove header for phone number column
-phone_nums.pop(0)
-
 # EDIT THE MESSAGE HERE
 # Create the message
-message = "THIS IS A TEST. I am working on the program and this text is a test."
+#message = "THIS IS A TEST. I am working on the program and this text is a test."
 
 # TextBelt url
 url = "http://textbelt.com/text"
 
 def main(argv):
 	try: 
-		opts, args = getopt.getopt(argv, "tm:", ["message"])
+		opts, args = getopt.getopt(argv, "testm:", ["message="])
 	except getopt.GetoptError:
 		print("To run test:\npython rapid_response.py -tm \"<message>\"")
 		print("To run actual rapid response:\npython rapid_response.py -m \"<message>\"")
+	for opt, arg in opts:
+		if opt == '-test':
+			print("test option")
+			# Open the test workbook and get the first sheet
+			wks = gc.open('Rapid Response Test').sheet1
+			sys.exit()
+	# Get the phone numbers column
+	phone_nums = wks.col_values(4)
+	# Get the text permissions
+	text_perms = wks.col_values(5)
+	# Remove header for phone number column
+	phone_nums.pop(0)
 	# Go through phone numbers
 	for number in phone_nums:
 		num_cell = wks.find(number)
